@@ -33,6 +33,7 @@ set guioptions-=m           " 隐藏菜单栏
 " 不要使用vi的键盘模式，而是vim自己的
 set nocompatible
 " 语法高亮
+syntax enable
 set syntax=on
 " 去掉输入错误的提示声音
 set noeb
@@ -42,12 +43,12 @@ set confirm
 set autoindent
 set cindent
 " Tab键的宽度
-set tabstop=4
-" 统一缩进为4
-set softtabstop=4
-set shiftwidth=4
-" 不要用空格代替制表符
-set noexpandtab
+set tabstop=2
+" 统一缩进为2
+set softtabstop=2
+set shiftwidth=2
+" 用空格代替制表符
+set expandtab
 " 在行和段开始处使用制表符
 set smarttab
 " 显示行号
@@ -76,6 +77,11 @@ set helplang=cn
 "set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\
 " 总是显示状态行
 set laststatus=1
+"set statusline=%-10.3n  "buffer number"
+map <silent> <leader>1 :diffget 1<CR> :diffupdate<CR>
+map <silent> <leader>2 :diffget 2<CR> :diffupdate<CR>
+map <silent> <leader>3 :diffget 3<CR> :diffupdate<CR>
+map <silent> <leader>4 :diffget 4<CR> :diffupdate<CR>
 " 命令行（在状态行下）的高度，默认为1，这里是2
 "set cmdheight=2
 " 侦测文件类型
@@ -147,8 +153,8 @@ nmap ss :wa<cr>
 imap <C-d> <Esc>:wa<cr>i<Right>
 map <F5> :cn<cr>
 nmap <F6> :cp<cr>
-nmap <F7> :bn<cr>
-nmap <F8> :bp<cr>
+nmap <F9> :bn<cr>
+nmap <F10> :bp<cr>
 
 "---------- plugins------------
 " winManager
@@ -181,3 +187,5 @@ let g:miniBufExplModSelTarget = 1
 "map <leader>u <plug>NERDCommenterUncomment
 " NERDTree
 map <F4> :NERDTreeToggle<CR>
+let g:vimgdb_debug_file = ""
+run macros/gdb_mappings.vim
