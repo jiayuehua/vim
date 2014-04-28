@@ -1,7 +1,7 @@
 vim
 ===
 
-vim plugins  vimrc.
+vim plugins vimrc .worked with vim 7.3.
 
 Usage:
 
