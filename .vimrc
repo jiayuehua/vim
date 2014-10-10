@@ -189,3 +189,5 @@ let g:miniBufExplModSelTarget = 1
 map <F4> :NERDTreeToggle<CR>
 let g:vimgdb_debug_file = ""
 run macros/gdb_mappings.vim
+command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+                 \ | wincmd p | diffthis
