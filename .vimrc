@@ -191,3 +191,7 @@ let g:vimgdb_debug_file = ""
 run macros/gdb_mappings.vim
 command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
                  \ | wincmd p | diffthis
+"let g:indent_guides_auto_colors = 0 
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3 
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4 
+"map <leader> <Plug>(easymotion-prefix)
