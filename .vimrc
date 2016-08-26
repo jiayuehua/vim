@@ -1,8 +1,206 @@
+" Matthew Wang's vimrc, see more at https://github.com/ymattw/profiles
+
+" Plugins managed by https://github.com/junegunn/vim-plug
+"
+if empty(glob('~/.vim/autoload/plug.vim'))
+    echomsg "*** vim-plug is missing, see https://github.com/junegunn/vim-plug"
+    finish
+endif
+
+set nocompatible
+call plug#begin('~/.vim/plugged')
+
+" No vim-polyglot, which has poor performance
+Plug 'digitaltoad/vim-jade', {'for': 'jade'}
+Plug 'moll/vim-node', {'for': 'javascript'}
+Plug 'hynek/vim-python-pep8-indent', {'for': 'python'}
+Plug 'fatih/vim-go', {'for': 'go'}
+Plug 'Valloric/MatchTagAlways', {'for': 'html'}
+Plug 'tpope/vim-endwise'
+Plug 'ymattw/vim-fold-paragraph'        " My own folding preference
+
+Plug 'elzr/vim-json', {'for': 'json'}
+let g:vim_json_syntax_conceal = 0       " Do not hide quotes
+
+Plug 'mileszs/ack.vim'
+let g:ackprg = 'ag --vimgrep --smart-case'
+let g:ackhighlight = 1
+cnoreabbrev Ag Ack!
+cnoreabbrev ag Ack!
+cnoreabbrev Af AckFile
+cnoreabbrev af AckFile
+
+" neocomplete can beat YouCompleteMe in both functionality and installation
+" friendly, it also replaces supertab and AutoComplPop.  NOTE! to auto complete
+" in golang, install 'gocode' to work with 'vim-go'.  For example run this from
+" command line: GOPATH=~ vim a.go +GoInstallBinaries +qall
+"
+if has('lua')
+    Plug 'Shougo/neocomplete.vim'
+    let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_smart_case = 1
+    let g:neocomplete#min_keyword_length = 3
+    let g:neocomplete#auto_completion_start_length = 1
+    inoremap <expr><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"  " Tab completion
+else
+    Plug 'ervandew/supertab'
+    let g:SuperTabDefaultCompletionType = "context"
+    let g:SuperTabContextDefaultCompletionType = "<c-n>"
+    let g:SuperTabNoCompleteAfter =
+        \ ['^', '\s', '[^-]>', "'", '[~`!@#$%^&*()+={},</?\"\[\]\|-]']
+
+    " With my own fix for #53 on bitbucket
+    Plug 'ymattw/AutoComplPop', {'branch': 'dev'}
+endif
+
+" Remember to change terminal type to xterm-256color!
+Plug 'altercation/vim-colors-solarized'
+
+call plug#end()
+
+" Default color and font tunings, needs to be after plug#end()
+silent! colorscheme solarized
+
+if has('gui_running')
+    set background=light
+    if has('gui_mac') || has('gui_macvim')
+        set guifont=Monaco:h13
+    elseif has('gui_gtk') || has('gui_gtk2')
+        set guifont=Bitstream\ Vera\ Sans\ Mono\ 13
+    endif
+else
+    set background=dark
+    set t_ti= t_te=                     " Prevent clear screen after exit
+endif
+
+" Basic settings
+"
+set noswapfile nobackup                 " No tmp files
+set suffixes+=.a,.so,.la,.class,.pyc    " Ignore list for file completion
+set suffixes+=.jpg,.png,.gif,.pdf,.doc,.tar,.tgz,.gz,.bz2,.zip
+set wildignore+=.git,*.o,*.a,*.so,*.la  " Ignore list for wildmenu completion
+set wildignore+=*.class,*.pyc,*.swp
+set wildignore+=*.jpg,*.png,*.gif,*.pdf,*.doc
+set wildignore+=*.tar,*.gz,*.tgz,*.bz2,*.zip
+set incsearch smartcase ignorecase hls  " Searching
+set encoding=utf-8 textwidth=79         " Editing
+set backspace=indent,eol,start          " Editing
+set formatoptions=tcqron1MB             " Formatting, MB for multi-byte chars
+silent! set formatoptions+=j            " Vim >= 7.3.541 only
+set wildmode=list:full                  " Misc: complete and list matched files
+set isfname-==                          " Misc: '=' is not part of filename
+set copyindent                          " Indenting
+set spelllang=en_us complete+=kspell    " Spell completion, see imap <C-K>
+set synmaxcol=128 lazyredraw ttyfast    " Performance
+syntax sync minlines=50 maxlines=200    " Performance
+silent! set nowildignorecase            " Vim >= 7.3.072 only
+silent! set nofileignorecase            " Vim >= 7.3.872 only
+silent! set foldmethod=manual           " Work with ymattw/vim-fold-paragraph
+
+"set list listchars=tab:▸\ ,trail:▌,extends:»,precedes:«
+
+" File type detect
+"
+autocmd! BufEnter *[Mm]akefile*,[Mm]ake.*,*.mak,*.make setlocal filetype=make
+
+" File type tab size
+"
+autocmd! FileType html,json
+            \ setlocal expandtab softtabstop=2 shiftwidth=2
+autocmd! FileType make setlocal noexpandtab shiftwidth=2
+autocmd! FileType gitcommit setlocal textwidth=80 spell
+
+" Better color for matched parenthesis
+highlight! MatchParen cterm=underline ctermfg=7 ctermbg=0
+
+" Better color for folded text (treat as comment)
+highlight! Folded cterm=bold ctermfg=10 ctermbg=0
+
+" Better color for Solarized theme in diff mode
+"
+highlight! DiffDelete ctermfg=10 ctermbg=0
+highlight! DiffAdd cterm=bold ctermfg=70 ctermbg=0
+highlight! DiffChange cterm=bold ctermfg=142 ctermbg=0
+highlight! DiffText cterm=underline ctermfg=142 ctermbg=0
+
+" More colors suitable for Solarized dark background
+"
+highlight! link ColorColumn Search
+highlight! link SpecialChars ErrorMsg
+2match SpecialChars /\%xa0\|[“”‘’—]/            " nbsp & smartly replaced chars
+
+
 let mapleader=","
-colorscheme desert
+" Maps for normal mode
+nnoremap <Leader>p  "+p|                    " Paste below from system clipboard
+nnoremap <Leader>P  "+P|                    " Paste above from system clipboard
+nnoremap <leader>s  :Ack! -w <cword><CR>|   " Quick search word under cursor
+nnoremap <leader>w  :w<CR>|                 " Save 2 key strokes
+
+" Maps for visual mode
+vnoremap <Leader>y  "+y|                    " Yank (copy) to system clipboard
+vnoremap <Leader>x  "+d|                    " Cut (delete) to system clipboard
+
+" Maps for command mode
+cnoremap w!!        w !sudo tee % > /dev/null
+
+" Misc
+"
+let python_highlight_all = 1
+
+autocmd VimResized * :wincmd =              " Realign vim window size
+autocmd InsertLeave * set nopaste           " Saves a <C-P>
+
+" Remember last cursor postion, :h last-position-jump
+set viminfo='10,\"10,<50,s10,%,h,f10
+autocmd! BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \     exe "normal! g`\"" |
+    \ endif
+
+
+" Helper functions
+"
+" Execute current file and pipe output to new scratch window below, window
+" height will be 1/3 of the vim window size
+"
+function! RunMe()
+    let file = expand("%:p")
+    let line = getline(1)
+
+    exe "botright " . (&lines / 3) . " new"
+        \ | setlocal buftype=nofile bufhidden=hide
+
+    if line =~ "^#!"
+        let intepreter = line[2:]
+    elseif file =~ '\.sh\|\.bash'
+        let intepreter = "bash"
+    elseif file =~ '\.py'
+        let intepreter = "python"
+    elseif file =~ '\.rb'
+        let intepreter = "ruby"
+    elseif file =~ '\.js'
+        let intepreter = "node"
+    elseif file =~ '\.go'
+        let intepreter = "go run"
+    elseif file =~ '\.pl'
+        let intepreter = "perl"
+    else
+        let intepreter = ""
+    endif
+
+    exe ".!" . intepreter . " " . file
+endfunction
+
+" EOF
+"
+" =================== jia vimrc ===============================================
+"let mapleader=","
+"colorscheme desert
 set number
 set novisualbell
 set hidden
+set diffopt=filler,iwhite
 
 " 设置当文件被改动时自动载入
 set autoread
@@ -69,7 +267,7 @@ set gdefault
 "set enc=utf-8
 "set fencs=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
 "语言设置
-set langmenu=zh_CN.UTF-8
+set langmenu=en_US.UTF-8
 set helplang=cn
 " 我的状态行显示的内容（包括文件类型和解码）
 "set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
