@@ -24,7 +24,8 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'terryma/vim-expand-region'
-
+"Plug 'tommcdo/vim-exchange'
+"Plug 'spiiph/vim-space'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/incsearch-easymotion.vim'
@@ -70,7 +71,10 @@ Plug 'vim-scripts/a.vim'
 Plug 'vim-scripts/minibufexpl.vim'
 Plug 'vim-scripts/grep.vim'
 "Plug 'vim-scripts/Indent-Guides'
-Plug 'vim-scripts/Conque-Shell'
+"Plug 'vim-scripts/Conque-Shell'
+Plug 'vim-scripts/winmanager'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'Shougo/neocomplete.nvim'
 "Plug 'kien/ctrlp.vim' 
 "if has('nvim')
   "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -585,13 +589,12 @@ Plug 'vim-scripts/Conque-Shell'
 "Plug 'kien/ctrlp.vim' 
 "if has('nvim')
   "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"else
+  "else
   "Plug 'Shougo/deoplete.nvim'
   "Plug 'roxma/nvim-yarp'
   "Plug 'roxma/vim-hug-neovim-rpc'
 "endif
 "let g:deoplete#enable_at_startup = 1
-
 "Plug 'neomake/neomake'
 "Plug 'mhinz/vim-startify'
 "Plug 'nathanaelkane/vim-indent-guides'
@@ -892,8 +895,6 @@ map <leader>u <plug>NERDCommenterUncomment
 "map <leader>b <plug>NERDCommenterAlignBoth
 " NERDTree
 map <F4> :NERDTreeToggle<CR>
-command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-                 \ | wincmd p | diffthis
 "let g:indent_guides_auto_colors = 0 
 "autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3 
 "autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4 
